@@ -1,0 +1,18 @@
+--- a/src/calc_traj_similarity.py
++++ b/src/calc_traj_similarity.py
+@@ -3,12 +3,14 @@
+ import random
+ import json
+ import argparse
+-from fastdtw import fastdtw
++# [POIBench patch 0002] fastdtw imported lazily in calc_dtw, so calc_lcs / calc_jaccard can be imported
++# without it (fastdtw is only needed for --similarity dtw and is not installed in the base env)
+ from tqdm import tqdm
+ import os
+ 
+ 
+ def calc_dtw(test_traj, train_traj):
++    from fastdtw import fastdtw  # [POIBench patch 0002]
+     test_traj = test_traj[["Latitude", "Longitude"]].values
+     train_traj = train_traj[["Latitude", "Longitude"]].values
+ 

@@ -1,0 +1,83 @@
+--- a/src/utils/prompt_utils.py
++++ b/src/utils/prompt_utils.py
+@@ -98,6 +98,80 @@
+     return prompt.strip()
+ 
+ 
++# ---------------------------------------------------------------------------------------------------------------
++# [POIBench patch 0001] target time withheld (POIBench PROTOCOL.md section 3: the target check-in time is not an
++# input). Minimal edit of create_case_dict / create_prompt: the current target tuple
++# "(start_time, day_of_week, <next_place_id>, <next_place_category>)" becomes "(<next_place_id>, <next_place_category>)",
++# the clause ", while temporal information is provided" and instruction item 3 ("the temporal information ... of
++# target stay") are removed. Everything else (wording, demonstrations with their own times, separators) is unchanged.
++# The original functions above are kept and used for the labelled "+target-time" ablation.
++def record2text_target_no_time(with_category=True):
++    if with_category:
++        return "(<next_place_id>, <next_place_category>)"
++    else:
++        return "(<next_place_id>)"
++
++
++def create_case_dict_no_target_time(context_seq, with_category=True):
++    """
++    input: dataframe of the context check-ins only (there is no target row, hence no target time)
++    output: dictionary of text representation of context and target stay
++    (same separator logic as create_case_dict, which compares the index LABEL i with len(context) - 1)
++    """
++    seq = {"context_stay": "", "target_stay": ""}
++
++    context_checkins = context_seq
++    for i, row in context_checkins.iterrows():
++        if i == len(context_checkins) - 1:
++            seq["context_stay"] += record2text(row, with_category=with_category)
++        else:
++            seq["context_stay"] += record2text(row, with_category=with_category) + ", "
++
++    seq["target_stay"] = record2text_target_no_time(with_category=with_category)
++
++    return seq
++
++
++def create_prompt_no_target_time(demos, input):
++    """
++    create_prompt without the target-time instruction (see the patch header above)
++    """
++    prompt = """
++    Your task is to predict a user's next location based on his/her activity pattern. You will be provided with some examples of the user's historical stay sequences.
++    One sequence consists of <context> and <target>. <context> provide contextual information about where and when this user has been to before the last stay. <target> is the last stay in the sequence. Stays in <context> are in chronological order.
++    Each stay takes on such form as (start_time, day_of_week, place_id, place_category). The detailed explanation of each element is as follows:
++    start_time: the start time of the stay in 12h clock format.
++    day_of_week: indicating the day of the week.
++    place_id: an integer representing the unique place ID, which indicates where the stay is.
++    place_category: a string representing the category of the place (e.g., Train Station, Park, etc.).
++
++    Then you need to do next location prediction on <target_current> based on <context_current> and examples. <target_current> is the prediction target with unknown place ID denoted as <next_place_id> and unknown place category name denoted as <next_place_category>.      
++    
++    Please infer what the <next_place_id> is (i.e., the most likely place ID), considering the following aspects:
++    1. the activity pattern of this user that you learned from examples, e.g., repeated visit to a certain place during certain time.
++    2. the context stays in <context_current>, which provide more recent activities of this user; 
++
++    Please organize your answer in a JSON object containing following keys: \"place_id\" and \"place_category\". Do not include reasons in your output.
++
++    The examples are as follows:
++    """
++
++    if demos:
++        for demo in demos:
++            prompt += f"""
++    <context>: {demo['context_stay']}
++    <target>: {demo['target_stay']}
++    """
++
++    prompt += f"""
++    The current data are as follows:
++    <context_current>: {input['context_stay']}
++    <target_current>: {input['target_stay']}
++    """
++
++    return prompt.strip()
++
++
+ # for LLM-Mob
+ def create_historical_data(checkin_seq, with_category=False):
+     historical_data = ""

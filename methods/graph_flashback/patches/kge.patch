@@ -1,0 +1,27 @@
+--- a/jTransUP/models/knowledge_representation.py
++++ b/jTransUP/models/knowledge_representation.py
+@@ -133,7 +133,8 @@
+     model.train()
+     model.enable_grad()
+ 
+-    for _ in range(trainer.step, trainer.epoch_length * 100):  # 训练training_steps个epoch,每个epoch有很多个batch,总共100个epoch
++    # POIBench patch: the epoch count (hard-coded 100) is read from FLAGS.kge_epochs (default 100) for smoke runs
++    for _ in range(trainer.step, trainer.epoch_length * getattr(FLAGS, "kge_epochs", 100)):  # 训练training_steps个epoch,每个epoch有很多个batch,总共100个epoch
+ 
+         # if 0 < FLAGS.early_stopping_steps_to_wait < (trainer.step - trainer.best_step):
+         #     logger.info('No improvement after ' +
+--- a/jTransUP/utils/visuliazer.py
++++ b/jTransUP/utils/visuliazer.py
+@@ -1,10 +1,11 @@
+-import visdom
++# POIBench patch: visdom is imported only when a Visualizer is created (has_visualization=False by default)
+ import time
+ import numpy as np
+ 
+ 
+ class Visualizer(object):
+     def __init__(self, env='default', **kwargs):
++        import visdom
+         self.vis = visdom.Visdom(env=env, **kwargs)
+         self.index = {}
+ 

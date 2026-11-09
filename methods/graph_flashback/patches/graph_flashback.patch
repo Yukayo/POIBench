@@ -1,0 +1,22 @@
+--- a/dataset.py
++++ b/dataset.py
+@@ -3,6 +3,10 @@
+ import torch
+ from torch.utils.data import Dataset
+ 
++# POIBench patch: the per-user 80/20 train/test cut is replaced by the benchmark's global chronological
++# split; the adapter passes only policy-visible train-period check-ins and sets TRAIN_FRACTION = 1.0.
++TRAIN_FRACTION = 0.8
++
+ 
+ class Split(Enum):
+     """ Defines whether to split for train or test.
+@@ -128,7 +132,7 @@
+         for i, (time, time_slot, coord, loc, label, lbl_time, lbl_time_slot, lbl_coord) in enumerate(
+                 zip(self.times, self.time_slots, self.coords, self.locs, self.labels, self.lbl_times,
+                     self.lbl_time_slots, self.lbl_coords)):
+-            train_thr = int(len(loc) * 0.8)
++            train_thr = int(len(loc) * TRAIN_FRACTION)  # POIBench patch
+             if split == Split.TRAIN:
+                 self.locs[i] = loc[:train_thr]
+                 self.times[i] = time[:train_thr]

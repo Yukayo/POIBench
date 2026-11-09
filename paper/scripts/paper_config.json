@@ -1,0 +1,835 @@
+{
+  "datasets": [
+    {
+      "ds": "nyc",
+      "label": "NYC"
+    },
+    {
+      "ds": "tky",
+      "label": "TKY"
+    },
+    {
+      "ds": "ca",
+      "label": "CA"
+    },
+    {
+      "ds": "sin",
+      "label": "SIN"
+    },
+    {
+      "ds": "istanbul",
+      "label": "Istanbul"
+    },
+    {
+      "ds": "sao_paulo",
+      "label": "São Paulo"
+    }
+  ],
+  "appendix_datasets": [
+    {
+      "ds": "gowalla",
+      "label": "Gowalla",
+      "note": "CPU simple baselines only (no GPU run this round)"
+    },
+    {
+      "ds": "foursquare_global",
+      "label": "Foursquare",
+      "note": "CPU simple baselines only (no GPU run this round)"
+    }
+  ],
+  "_doc_main_policy_overrides": "Per dataset, prediction policy shown for a method in the main / strata / cost tables instead of H-100 (LOG 2026-10-28 'S-u policy'): LLM fine-tunes on the two large datasets use the S-u user-subsample training set; such cells are marked with a section sign and footnoted.",
+  "main_policy_overrides": {
+    "gowalla": {
+      "llm4poi": "S-u",
+      "gnpr-sid": "S-u"
+    },
+    "foursquare_global": {
+      "llm4poi": "S-u",
+      "gnpr-sid": "S-u"
+    }
+  },
+  "methods": [
+    {
+      "pred": "pop",
+      "label": "Pop",
+      "family": "simple"
+    },
+    {
+      "pred": "repeat",
+      "label": "Repeat",
+      "family": "simple"
+    },
+    {
+      "pred": "markov",
+      "label": "Markov",
+      "family": "simple"
+    },
+    {
+      "pred": "hybrid",
+      "label": "Hybrid",
+      "family": "simple"
+    },
+    {
+      "pred": "getnext",
+      "label": "GETNext",
+      "family": "trained"
+    },
+    {
+      "pred": "getnext-zfeat",
+      "label": "GETNext-z",
+      "family": "trained"
+    },
+    {
+      "pred": "graph-flashback",
+      "label": "Graph-Flashback",
+      "family": "trained"
+    },
+    {
+      "pred": "ds-llm4poi-lcs",
+      "label": "DS-LLM4POI (LCS)",
+      "family": "llm"
+    },
+    {
+      "pred": "llm4poi",
+      "label": "LLM4POI",
+      "family": "llm"
+    },
+    {
+      "pred": "gnpr-sid",
+      "label": "GNPR-SID",
+      "family": "llm"
+    },
+    {
+      "pred": "ga-llm",
+      "label": "GA-LLM",
+      "family": "llm"
+    }
+  ],
+  "dataneeds_methods": [
+    "hybrid",
+    "getnext",
+    "getnext-zfeat",
+    "graph-flashback",
+    "ds-llm4poi-lcs",
+    "llm4poi",
+    "gnpr-sid",
+    "ga-llm"
+  ],
+  "strata_methods": [
+    "repeat",
+    "markov",
+    "hybrid",
+    "getnext",
+    "graph-flashback",
+    "ds-llm4poi-lcs",
+    "llm4poi",
+    "gnpr-sid",
+    "ga-llm"
+  ],
+  "flips": [
+    {
+      "label": "target time",
+      "method": "DS-LLM4POI",
+      "ds": "nyc",
+      "key": "tt-ds",
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time",
+      "method": "LLM4POI",
+      "ds": "nyc",
+      "key": "tt-llm4poi",
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "DS-LLM4POI",
+      "ds": "tky",
+      "key": "tt-ds-tky",
+      "exploratory": true,
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "DS-LLM4POI",
+      "ds": "ca",
+      "key": "tt-ds-ca",
+      "exploratory": true,
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "DS-LLM4POI",
+      "ds": "sin",
+      "key": "tt-ds-sin",
+      "exploratory": true,
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "DS-LLM4POI",
+      "ds": "istanbul",
+      "key": "tt-ds-istanbul",
+      "exploratory": true,
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "DS-LLM4POI",
+      "ds": "sao_paulo",
+      "key": "tt-ds-sao_paulo",
+      "exploratory": true,
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "LLM4POI",
+      "ds": "tky",
+      "key": "tt-llm4poi-tky",
+      "exploratory": true,
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "LLM4POI",
+      "ds": "ca",
+      "key": "tt-llm4poi-ca",
+      "exploratory": true,
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "LLM4POI",
+      "ds": "sin",
+      "key": "tt-llm4poi-sin",
+      "exploratory": true,
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "LLM4POI",
+      "ds": "istanbul",
+      "key": "tt-llm4poi-istanbul",
+      "exploratory": true,
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "LLM4POI",
+      "ds": "sao_paulo",
+      "key": "tt-llm4poi-sao_paulo",
+      "exploratory": true,
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "GNPR-SID",
+      "ds": "nyc",
+      "key": "tt-gnpr-nyc",
+      "exploratory": true,
+      "default": {
+        "pred": "gnpr-sid",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "gnpr-sid-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "target time$^{b}$",
+      "method": "GNPR-SID",
+      "ds": "tky",
+      "key": "tt-gnpr-tky",
+      "exploratory": true,
+      "default": {
+        "pred": "gnpr-sid",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "gnpr-sid-tt",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "last check-in",
+      "method": "Hybrid",
+      "ds": "nyc",
+      "key": "last-hybrid",
+      "default": {
+        "pred": "hybrid",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "hybrid",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "last check-in",
+      "method": "GETNext",
+      "ds": "nyc",
+      "key": "last-getnext",
+      "default": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "last check-in",
+      "method": "Graph-Flashback",
+      "ds": "nyc",
+      "key": "last-graph-flashback",
+      "default": {
+        "pred": "graph-flashback",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "graph-flashback",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "last check-in",
+      "method": "DS-LLM4POI",
+      "ds": "nyc",
+      "key": "last-ds-llm4poi-lcs",
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "last check-in",
+      "method": "LLM4POI",
+      "ds": "nyc",
+      "key": "last-llm4poi",
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "last check-in",
+      "method": "GNPR-SID",
+      "ds": "nyc",
+      "key": "last-gnpr-sid",
+      "default": {
+        "pred": "gnpr-sid",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "gnpr-sid",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "time + last",
+      "method": "DS-LLM4POI",
+      "ds": "nyc",
+      "key": "ttlast-ds",
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-tt",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "time + last",
+      "method": "LLM4POI",
+      "ds": "nyc",
+      "key": "ttlast-llm4poi",
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-tt",
+        "policy": "H-100",
+        "stratum": "pos=last"
+      }
+    },
+    {
+      "label": "strict parsing",
+      "method": "DS-LLM4POI",
+      "ds": "nyc",
+      "key": "strict-ds",
+      "default": {
+        "pred": "ds-llm4poi-lcs",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "ds-llm4poi-lcs-strictparse",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "strict parsing",
+      "method": "LLM4POI",
+      "ds": "nyc",
+      "key": "strict-llm4poi",
+      "default": {
+        "pred": "llm4poi",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "llm4poi-strictparse",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "pre-cutoff filter$^{a}$",
+      "method": "Hybrid",
+      "ds": "nyc",
+      "key": "filter-nyc",
+      "default": {
+        "pred": "hybrid",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "hybrid",
+        "policy": "H-100",
+        "stratum": "all",
+        "ds": "nyc_trainfilter"
+      }
+    },
+    {
+      "label": "pre-cutoff filter$^{a}$",
+      "method": "Hybrid",
+      "ds": "tky",
+      "key": "filter-tky",
+      "default": {
+        "pred": "hybrid",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "hybrid",
+        "policy": "H-100",
+        "stratum": "all",
+        "ds": "tky_trainfilter"
+      }
+    },
+    {
+      "label": "time-axis attention",
+      "method": "GETNext",
+      "ds": "nyc",
+      "key": "fixed-nyc",
+      "default": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "getnext-fixed",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "log visit counts",
+      "method": "GETNext",
+      "ds": "tky",
+      "key": "normfeat-tky",
+      "default": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "getnext-normfeat",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "log visit counts",
+      "method": "GETNext",
+      "ds": "ca",
+      "key": "normfeat-ca",
+      "default": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "getnext-normfeat",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "log visit counts",
+      "method": "GETNext",
+      "ds": "sin",
+      "key": "normfeat-sin",
+      "default": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "getnext-normfeat",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "log visit counts",
+      "method": "GETNext",
+      "ds": "istanbul",
+      "key": "normfeat-istanbul",
+      "default": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "getnext-normfeat",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    },
+    {
+      "label": "log visit counts",
+      "method": "GETNext",
+      "ds": "sao_paulo",
+      "key": "normfeat-sao_paulo",
+      "default": {
+        "pred": "getnext",
+        "policy": "H-100",
+        "stratum": "all"
+      },
+      "flipped": {
+        "pred": "getnext-normfeat",
+        "policy": "H-100",
+        "stratum": "all"
+      }
+    }
+  ],
+  "canary": {
+    "_doc": "logs/canary/<name>__<ds>__<policy>__val.json; first matching regex gives the label; names matching 'skip' are not shown (mock-backend dry runs).",
+    "skip": [
+      "-mock(-|$)",
+      "^builtin_prev_then_pop",
+      "CPUTEST"
+    ],
+    "labels": [
+      [
+        "^methods_gallm_run\\.py",
+        "GA-LLM",
+        "adapter"
+      ],
+      [
+        "^methods_export_hybrid_run\\.py",
+        "Hybrid (export adapter)",
+        "adapter"
+      ],
+      [
+        "^methods_getnext_run\\.py-fixed",
+        "GETNext (attention fixed)",
+        "adapter"
+      ],
+      [
+        "^methods_getnext_run\\.py-normfeat",
+        "GETNext (log-scaled counts)",
+        "adapter"
+      ],
+      [
+        "^methods_getnext_run\\.py",
+        "GETNext",
+        "adapter"
+      ],
+      [
+        "^graph_flashback_fullpipeline",
+        "Graph-Flashback (full pipeline)",
+        "adapter"
+      ],
+      [
+        "^methods_graph_flashback_run\\.py",
+        "Graph-Flashback",
+        "adapter"
+      ],
+      [
+        "^methods_ds_llm4poi_run\\.py",
+        "DS-LLM4POI",
+        "adapter"
+      ],
+      [
+        "^methods_llm4poi",
+        "LLM4POI",
+        "adapter"
+      ],
+      [
+        "^methods_gnpr_sid_run\\.py-tt",
+        "GNPR-SID (target time)",
+        "adapter"
+      ],
+      [
+        "^methods_gnpr_sid",
+        "GNPR-SID",
+        "adapter"
+      ],
+      [
+        "^methods_qwen25_vl_ref|^qwen25_vl_ref-[ABC]$",
+        "VLM re-ranker",
+        "adapter"
+      ],
+      [
+        "^mmpoi-image",
+        "MMPOI",
+        "adapter"
+      ],
+      [
+        "^mmpoi-noimage",
+        "MMPOI (no images)",
+        "adapter"
+      ],
+      [
+        "LEAKY_CONTROL",
+        "leaky control (graph input)",
+        "control"
+      ],
+      [
+        "^builtin_leaky_sibling",
+        "leaky control (other queries)",
+        "control"
+      ]
+    ]
+  },
+  "multimodal": {
+    "ds": "nyc",
+    "policy": "H-100",
+    "groups": [
+      {
+        "title": "VLM re-ranker, within-candidate",
+        "mode": "cand",
+        "rows": [
+          {
+            "pred": "qwen2.5-vl-ref-A",
+            "label": "VLM A",
+            "evidence": "text"
+          },
+          {
+            "pred": "qwen2.5-vl-ref-B",
+            "label": "VLM B",
+            "evidence": "+ captions"
+          },
+          {
+            "pred": "qwen2.5-vl-ref-C",
+            "label": "VLM C",
+            "evidence": "+ photos"
+          }
+        ]
+      },
+      {
+        "title": "trained models, end-to-end",
+        "mode": "e2e",
+        "rows": [
+          {
+            "pred": "hybrid",
+            "label": "Hybrid",
+            "evidence": "counts"
+          },
+          {
+            "pred": "getnext",
+            "label": "GETNext",
+            "evidence": "cat."
+          },
+          {
+            "pred": "mmpoi-noimage",
+            "label": "MMPOI",
+            "evidence": "cat.+tips"
+          },
+          {
+            "pred": "mmpoi",
+            "label": "MMPOI",
+            "evidence": "cat.+tips+photos"
+          }
+        ]
+      }
+    ],
+    "extra_ds": [
+      {
+        "ds": "tky",
+        "label": "TKY",
+        "exploratory": true
+      }
+    ],
+    "ds_label": "NYC"
+  },
+  "dataneeds_datasets": [
+    "nyc",
+    "tky",
+    "istanbul"
+  ],
+  "_doc_exploratory": "Entries with \"exploratory\": true are EXPLORATORY extensions (PROTOCOL 6.3; LOG 2026-11-01): not pre-registered, reported with CIs only, marked b in the tables.",
+  "flips_hide_labels": [
+    "strict parsing",
+    "time-axis attention",
+    "log visit counts",
+    "target time$^{b}$"
+  ],
+  "_doc_completion_rows": "EXPLORATORY rows appended to the main table (LOG 2026-11-03 12:10Z, results from paper_H-100 / exploratory_timeaware): a single-answer LLM's answer at rank 1 followed by Hybrid's ranked list instead of the shared retriever's. Never bolded; not part of any Holm family.",
+  "completion_rows": [
+    {
+      "pred": "llm4poi+hybridtail",
+      "label": "LLM4POI+H"
+    },
+    {
+      "pred": "ds-llm4poi-lcs+hybridtail",
+      "label": "DS-LLM4POI+H"
+    }
+  ],
+  "_doc_pending_rows": "methods whose rows are shown with dashes in every results table until their runs exist (GA-LLM: runs in progress)",
+  "pending_rows": [
+    "ga-llm"
+  ]
+}
